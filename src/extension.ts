@@ -52,24 +52,35 @@ class RelatedFiles  {
       }
   
       let relatedFile: any;
+      let relatedCssFile: any;
       const fileName = editor.document.fileName;
       const extension = path.extname(fileName).toLowerCase();
       if (extension === '.html') {
-        const [tsFile, jsFile] = await Promise.all([
+        const [tsFile, jsFile, scssFile] = await Promise.all([
           this.relatedFileExists(fileName, '.ts'),
           this.relatedFileExists(fileName, '.js'),
+          this.relatedFileExists(fileName, '.scss'),
         ]);
         if (tsFile) {
           relatedFile = tsFile;
         } else if (jsFile) {
           relatedFile = jsFile;
         }
+
+        if (scssFile){
+            relatedCssFile=scssFile;
+        }
+
       } else if (extension === '.js' || extension === '.ts') {
         relatedFile = await this.relatedFileExists(fileName, '.html');
+        relatedCssFile = await this.relatedFileExists(fileName, '.scss');
       }
   
       if (relatedFile) {
         commands.executeCommand('vscode.open', Uri.file(relatedFile), ViewColumn.Two);
+      }
+      if (relatedCssFile) {
+        commands.executeCommand('vscode.open', Uri.file(relatedCssFile), ViewColumn.Three);
       }
     }
   
