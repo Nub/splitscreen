@@ -18,15 +18,23 @@ export function activate(context: vscode.ExtensionContext) {
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with  registerCommand
   // The commandId parameter must match the command field in package.json
-  let disposable = vscode.commands.registerTextEditorCommand('extension.splitScreen', (editor, edit) => {
+  let disposable = vscode.commands.registerTextEditorCommand('extension.splitScreen3', (editor, edit) => {
     // The code you place here will be executed every time your command is executed
 
     // Display a message box to the user
-    vscode.window.showInformationMessage('SplitScreen working...');
-    relatedFile.onOpenRelated(editor, edit);
+    relatedFile.onOpenRelated(editor, edit, 3);
   });
 
+  let disposable2 = vscode.commands.registerTextEditorCommand('extension.splitScreen2', (editor, edit) => {
+    // The code you place here will be executed every time your command is executed
+
+    // Display a message box to the user
+    relatedFile.onOpenRelated(editor, edit, 2);
+  });
+
+
   context.subscriptions.push(disposable);
+  context.subscriptions.push(disposable2);
 }
 
 // this method is called when your extension is deactivated
@@ -46,7 +54,7 @@ class RelatedFiles {
   //   }
   // }
 
-  async onOpenRelated(editor: TextEditor, edit: TextEditorEdit) {
+  async onOpenRelated(editor: TextEditor, edit: TextEditorEdit, count: number) {
     if (!editor || !editor.document || editor.document.isUntitled) {
       return;
     }
@@ -103,24 +111,30 @@ class RelatedFiles {
           await this.foldLine(currentEditor, lineScript);
           await this.foldLine(currentEditor, lineStyle);
           await this.gotoLine(currentEditor, lineTemplate);
+          vscode.window.showInformationMessage('Your files, perfectly organized. Now write code. ');
+
         }
 
         // <style>
-        await commands.executeCommand('vscode.open', Uri.file(fileName), ViewColumn.Three);
-        currentEditor = this.getEditorByFileAndView(fileName, ViewColumn.Three);
-        if (currentEditor) {
-          let [lineTemplate, lineScript, lineStyle] = this.getVueLineNumbers(currentEditor);
-          await this.foldLine(currentEditor, lineScript);
-          await this.foldLine(currentEditor, lineTemplate);
-          await this.gotoLine(currentEditor, lineStyle);
+        if (count === 3) {
+          await commands.executeCommand('vscode.open', Uri.file(fileName), ViewColumn.Three);
+          currentEditor = this.getEditorByFileAndView(fileName, ViewColumn.Three);
+          if (currentEditor) {
+            let [lineTemplate, lineScript, lineStyle] = this.getVueLineNumbers(currentEditor);
+            await this.foldLine(currentEditor, lineScript);
+            await this.foldLine(currentEditor, lineTemplate);
+            await this.gotoLine(currentEditor, lineStyle);
+          }
         }
       }
     }
 
     if (relatedFile) {
       commands.executeCommand('vscode.open', Uri.file(relatedFile), ViewColumn.Two);
+      vscode.window.showInformationMessage('Your files, perfectly organized. Now write some code');
+
     }
-    if (relatedCssFile) {
+    if (relatedCssFile && count===3) {
       commands.executeCommand('vscode.open', Uri.file(relatedCssFile), ViewColumn.Three);
     }
   }
@@ -178,7 +192,7 @@ class RelatedFiles {
           lineTemplate = i;
         } else if (l.indexOf('<script>') !== -1) {
           lineScript = i;
-        } else if (l.indexOf('<style>') !== -1) {
+        } else if (l.indexOf('<style') !== -1) {
           lineStyle = i;
         }
       });

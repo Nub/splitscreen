@@ -1,8 +1,12 @@
 {
     "name": "splitscreen",
     "displayName": "SplitScreen",
-    "description": "",
-    "version": "0.0.1",
+    "description": "SplitsScreen verticaly between javascript, html and css. Works on Vue, Aurelia, and others",
+    "version": "0.0.2",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/larserikfinholt/splitscreen"
+    },
     "publisher": "larserikfinholt",
     "engines": {
         "vscode": "^1.28.0"
@@ -11,16 +15,32 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.splitScreen"
+        "onCommand:extension.splitScreen2",
+        "onCommand:extension.splitScreen3"
     ],
     "main": "./out/extension",
     "contributes": {
         "commands": [
             {
-                "command": "extension.splitScreen",
-                "title": "SplitScreen [js | html |css]"
+                "command": "extension.splitScreen2",
+                "title": "SplitScreen js | html"
+            },
+            {
+                "command": "extension.splitScreen3",
+                "title": "SplitScreen js | html | css"
             }
-        ]
+        ],
+        "keybindings": [{
+            "command": "extension.splitScreen2",
+            "key": "ctrl+i 2",
+            "mac": "cmd+i 2",
+            "when": "editorTextFocus"
+        },{
+            "command": "extension.splitScreen3",
+            "key": "ctrl+i 3",
+            "mac": "cmd+i 3",
+            "when": "editorTextFocus"
+        }]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
@@ -35,5 +55,11 @@
         "tslint": "^5.8.0",
         "@types/node": "^8.10.25",
         "@types/mocha": "^2.2.42"
-    }
+    },
+    "keywords": [
+        "Vue",
+        "Aurelia",
+        "Views",
+        "Split"
+    ]
 }
