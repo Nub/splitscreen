@@ -1,8 +1,8 @@
 {
     "name": "splitscreen",
     "displayName": "SplitScreen",
-    "description": "SplitsScreen verticaly between javascript, html and css. Works on Vue, Aurelia, and others",
-    "version": "0.0.2",
+    "description": "SplitsScreen verticaly between javascript, html and css. Works on Vue, Angular, Aurelia, and others",
+    "version": "0.0.3",
     "repository": {
         "type": "git",
         "url": "https://github.com/larserikfinholt/splitscreen"
@@ -59,6 +59,7 @@
     "keywords": [
         "Vue",
         "Aurelia",
+        "Angular",
         "Views",
         "Split"
     ]
